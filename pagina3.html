@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trivia de Construcción - Modo Oscuro</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background: linear-gradient(to right, #1a1a1a, #333);
+            color: #f5f5f5;
+        }
+        .quiz-container {
+            background: #2c2c2c;
+            color: #f5f5f5;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+            width: 90%;
+            max-width: 700px;
+            text-align: center;
+        }
+        .quiz-container h2 {
+            font-size: 1.2em;
+            margin-bottom: 20px;
+            color: #f5f5f5;
+        }
+        .quiz-container button {
+            margin: 10px 0;
+            padding: 15px;
+            width: calc(100% - 30px);
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+        .quiz-container button:hover {
+            transform: scale(1.05);
+        }
+        .quiz-container button.correct {
+            background-color: #4caf50;
+            color: #fff;
+        }
+        .quiz-container button.incorrect {
+            background-color: #f44336;
+            color: #fff;
+        }
+        .quiz-container button.option {
+            background-color: #2196f3;
+            color: #fff;
+        }
+        .quiz-container button.option:hover {
+            background-color: #1976d2;
+        }
+        .result {
+            margin-top: 20px;
+            font-size: 1.2em;
+            color: #f5f5f5;
+        }
+        #score {
+            font-size: 1.5em;
+            margin-bottom: 20px;
+        }
+        #nextButton {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #2196f3;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+        #nextButton:hover {
+            background-color: #1976d2;
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+
+<div class="quiz-container">
+    <div id="score">Puntuación: 0</div>
+    <div id="quiz">
+        <!-- Pregunta 1 -->
+        <div class="question" id="question1">
+            <h2>¿Cuáles son nuestras áreas de especialización?</h2>
+            <button class="option" onclick="checkAnswer(this, 'correcta')">Infraestructura vial, Proyectos hidráulicos, Obras urbanas, Construcción de edificios y viviendas, Proyectos industriales</button>
+            <button class="option" onclick="checkAnswer(this, 'incorrecta')">Construcción de puentes, Proyectos agrícolas, Servicios de jardinería, Instalaciones eléctricas</button>
+            <button class="option" onclick="checkAnswer(this, 'incorrecta')">Renovación de interiores, Servicios de mudanza, Construcción de pistas de atletismo, Instalación de calefacción</button>
+            <button class="option" onclick="checkAnswer(this, 'incorrecta')">Mantenimiento de carreteras, Diseño de interiores, Proyectos cinematográficos, Construcción de monumentos</button>
+        </div>
+
+        <!-- Pregunta 2 -->
+        <div class="question" id="question2" style="display: none;">
+            <h2>¿Cuáles son nuestros proyectos hidráulicos?</h2>
+            <button class="option" onclick="checkAnswer(this, 'correcta')">Represas, Diques y sistemas de control de inundaciones para gestión de recursos hídricos</button>
+            <button class="option" onclick="checkAnswer(this, 'incorrecta')">Diseño de jardines, Construcción de caminos, Instalación de redes eléctricas, Mantenimiento de edificios</button>
+            <button class="option" onclick="checkAnswer(this, 'incorrecta')">Construcción de gimnasios, Restauración de edificios antiguos, Instalación de sistemas de refrigeración, Diseño de parques</button>
+            <button class="option" onclick="checkAnswer(this, 'incorrecta')">Proyectos de urbanización, Instalación de paneles solares, Construcción de bibliotecas, Proyectos de acústica</button>
+        </div>
+
+        <!-- Pregunta 3 -->
+        <div class="question" id="question3" style="display: none;">
+            <h2>¿Qué obra de la región del litoral es explotada por su caudal?</h2>
+            <button class="option" onclick="checkAnswer(this, 'correcta')">La obra de "Arrayanes", Río Limay</button>
+            <button class="option" onclick="checkAnswer(this, 'incorrecta')">Represa de Yacyretá, Río Paraná</button>
+            <button class="option" onclick="checkAnswer(this, 'incorrecta')">Dique de El Nihuil, Río Atuel</button>
+            <button class="option" onclick="checkAnswer(this, 'incorrecta')">Embalse de Potrerillos, Río Mendoza</button>
+        </div>
+    </div>
+    <button id="nextButton" style="display: none;" onclick="nextQuestion()">Siguiente</button>
+    <div id="finalResult" class="result"></div>
+</div>
+
+<script>
+    let currentQuestion = 1;
+    let score = 0;
+
+    function checkAnswer(button, answer) {
+        const resultDiv = document.getElementById('result');
+        const buttons = document.querySelectorAll('.option');
+        if (answer === 'correcta') {
+            resultDiv.textContent = '¡Correcto!';
+            button.classList.add('correct');
+            score++;
+        } else {
+            resultDiv.textContent = 'Incorrecto, intenta de nuevo.';
+            button.classList.add('incorrect');
+        }
+        document.getElementById('score').textContent = 'Puntuación: ' + score;
+        buttons.forEach(btn => btn.disabled = true);
+        document.getElementById('nextButton').style.display = 'block';
+    }
+
+    function nextQuestion() {
+        document.getElementById('question' + currentQuestion).style.display = 'none';
+        currentQuestion++;
+        if (currentQuestion > 3) {
+            document.getElementById('finalResult').textContent = '¡Has completado el cuestionario! Tu puntuación final es: ' + score;
+            document.getElementById('nextButton').style.display = 'none';
+        } else {
+            document.getElementById('question' + currentQuestion).style.display = 'block';
+            document.getElementById('result').textContent = '';
+            document.querySelectorAll('.option').forEach(btn => btn.classList.remove('correct', 'incorrect'));
+            document.querySelectorAll('.option').forEach(btn => btn.disabled = false);
+            document.getElementById('nextButton').style.display = 'none';
+        }
+    }
+</script>
+
+</body>
+</html>
