@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trivia</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&family=Open+Sans:wght@300;600&family=Poppins:wght@600&display=swap" rel="stylesheet">
+    <style>
+        /* Estilos básicos en modo oscuro */
+        body {
+            font-family: 'Roboto', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #121212; /* Color de fondo oscuro */
+            margin: 0;
+            color: #e0e0e0;
+            overflow: hidden;
+        }
+        .title {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            color: #e0e0e0;
+            background-color: #1f1f1f;
+            padding: 10px 20px;
+            text-align: center;
+            width: 100%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            border-bottom: 2px solid #333;
+            font-size: 1.5em; /* Tamaño moderado para el título */
+            z-index: 1;
+        }
+        .quiz-container {
+            background: #1e1e1e;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+            max-width: 90%;
+            width: 500px;
+            margin-top: 70px; /* Espacio para el título */
+            box-sizing: border-box;
+            text-align: center;
+            border: 1px solid #333;
+        }
+        h2 {
+            font-family: 'Open Sans', sans-serif;
+            font-weight: 500;
+            color: #1e90ff;
+        }
+        .option {
+            margin: 10px 0;
+            padding: 15px;
+            width: 100%;
+            border: none;
+            border-radius: 8px;
+            background-color: #1e90ff;
+            color: #ffffff;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+        .option:hover {
+            background-color: #187bcd;
+            transform: scale(1.02);
+        }
+        .option.correct {
+            background-color: #28a745;
+        }
+        .option.incorrect {
+            background-color: #dc3545;
+        }
+        .result {
+            margin-top: 20px;
+            font-size: 1em;
+            font-weight: 500;
+            color: #e0e0e0;
+        }
+        .navigation {
+            margin-top: 20px;
+        }
+        #nextButton {
+            background-color: #28a745;
+            border: none;
+            border-radius: 8px;
+            padding: 10px 20px;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+        #nextButton:hover {
+            background-color: #218838;
+            transform: scale(1.02);
+        }
+        #score {
+            font-size: 1em;
+            color: #1e90ff;
+        }
+        footer {
+            margin-top: 30px;
+            font-size: 0.8em;
+            color: #666;
+        }
+        footer a {
+            color: #1e90ff;
+            text-decoration: none;
+        }
+        footer a:hover {
+            text-decoration: underline;
+        }
+        .emoji {
+            font-size: 2em; /* Tamaño moderado para emojis */
+        }
+
+        /* Estilos responsivos */
+        @media (max-width: 600px) {
+            .title {
+                font-size: 1.2em; /* Tamaño más pequeño en móviles */
+            }
+            .quiz-container {
+                width: 90%;
+                padding: 15px;
+            }
+            .option {
+                font-size: 14px;
+                padding: 12px;
+            }
+            #nextButton {
+                padding: 8px 16px;
+                font-size: 14px;
+            }
+            .result {
+                font-size: 0.9em;
+            }
+            footer {
+                font-size: 0.7em;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="title">
+    <h1>Cuestionario</h1>
+</div>
+
+<div class="quiz-container">
+    <h2 id="question">Pregunta</h2>
+    <button class="option" onclick="checkAnswer(0)">Opción A</button>
+    <button class="option" onclick="checkAnswer(1)">Opción B</button>
+    <button class="option" onclick="checkAnswer(2)">Opción C</button>
+    <button class="option" onclick="checkAnswer(3)">Opción D</button>
+    <div id="result" class="result"></div>
+    <div id="score" class="result">Puntaje: 0</div>
+    <div class="navigation">
+        <button id="nextButton" onclick="nextQuestion()">Siguiente</button>
+    </div>
+    <footer>
+        <p>Trivia creado por <a href="#">Works of the Litoral</a></p>
+    </footer>
+</div>
+
+<script>
+    // Lista de preguntas
+    const questions = [
+        {
+            question: "¿Cuáles son nuestras áreas de especialización?",
+            options: [
+                "Infraestructura vial, Proyectos hidráulicos, Obras urbanas, Construcción de edificios y viviendas, Proyectos industriales",
+                "Proyectos hidráulicos, Obras urbanas, Construcción de edificios y viviendas",
+                "Infraestructura vial, Obras urbanas, Proyectos industriales",
+                "Construcción de edificios y viviendas, Proyectos industriales"
+            ],
+            answer: 0
+        },
+        {
+            question: "¿Cuáles son nuestros proyectos hidráulicos?",
+            options: [
+                "Represas, diques y sistemas de control de inundaciones para gestión de recursos hídricos",
+                "Represas y diques",
+                "Sistemas de control de inundaciones",
+                "Represas, diques, y proyectos urbanos"
+            ],
+            answer: 0
+        },
+        {
+            question: "¿Qué obra de la región del Litoral es explotada por su caudal?",
+            options: [
+                "La obra de 'Arrayanes' Río Limay",
+                "La obra de 'Río Paraná'",
+                "La obra de 'Río Uruguay'",
+                "La obra de 'Río Paraguay'"
+            ],
+            answer: 0
+        }
+    ];
+
+    let currentQuestionIndex = 0;
+    let score = 0;
+
+    function displayQuestion() {
+        const questionData = questions[currentQuestionIndex];
+        document.getElementById('question').textContent = questionData.question;
+
+        // Mezclar opciones
+        const options = [...questionData.options];
+        const correctOption = options.splice(questionData.answer, 1)[0];
+        options.splice(Math.floor(Math.random() * options.length), 0, correctOption);
+        
+        const buttons = document.querySelectorAll('.option');
+        buttons.forEach((button, i) => {
+            button.textContent = options[i];
+            button.disabled = false;
+            button.classList.remove('correct', 'incorrect');
+            button.setAttribute('data-correct', options[i] === correctOption ? 'true' : 'false');
+        });
+
+        document.getElementById('result').textContent = '';
+    }
+
+    function checkAnswer(index) {
+        const buttons = document.querySelectorAll('.option');
+        const selectedButton = buttons[index];
+        const resultDiv = document.getElementById('result');
+        const correctOption = questions[currentQuestionIndex].options[questions[currentQuestionIndex].answer];
+        
+        if (selectedButton.getAttribute('data-correct') === 'true') {
+            resultDiv.textContent = '¡Correcto!';
+            selectedButton.classList.add('correct');
+            score++;
+        } else {
+            resultDiv.textContent = `Incorrecto, la respuesta correcta era: ${correctOption}`;
+            selectedButton.classList.add('incorrect');
+        }
+        // Deshabilitar botones después de responder
+        buttons.forEach(btn => btn.disabled = true);
+        // Actualizar el puntaje
+        document.getElementById('score').textContent = `Puntaje: ${score}`;
+    }
+
+    function nextQuestion() {
+        currentQuestionIndex++;
+        if (currentQuestionIndex < questions.length) {
+            displayQuestion();
+        } else {
+            const resultDiv = document.getElementById('result');
+            const emoji = score === questions.length ? '😊' : '😢';
+            resultDiv.innerHTML = `Tu puntaje final es ${score} de ${questions.length} ${emoji}`;
+            document.getElementById('question').textContent = '¡Has completado el cuestionario!';
+            const buttons = document.querySelectorAll('.option');
+            buttons.forEach(button => button.style.display = 'none');
+            document.getElementById('nextButton').style.display = 'none';
+        }
+    }
+
+    // Mostrar la primera pregunta al cargar la página
+    displayQuestion();
+</script>
+
+</body>
+</html>
