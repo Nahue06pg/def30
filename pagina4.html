@@ -13,16 +13,16 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
-            background-color: #121212; /* Color de fondo oscuro */
-            margin: 0;
-            color: #e0e0e0;
+            background-color: #252121; /* Color de fondo oscuro */
+            margin: 5;
+            color: #a52c2c;
             overflow: hidden;
         }
         .title {
             font-family: 'Poppins', sans-serif;
-            font-weight: 600;
-            color: #e0e0e0;
-            background-color: #1f1f1f;
+            font-weight: 300;
+            color: #2b879e;
+            background-color: #1b1818ee;
             padding: 10px 20px;
             text-align: center;
             width: 100%;
@@ -30,8 +30,8 @@
             top: 0;
             left: 0;
             border-bottom: 2px solid #333;
-            font-size: 1.5em; /* Tamaño moderado para el título */
-            z-index: 1;
+            font-size: 1.2em; /* Tamaño moderado para el título */
+            z-index: 2;
         }
         .quiz-container {
             background: #1e1e1e;
@@ -43,18 +43,18 @@
             margin-top: 70px; /* Espacio para el título */
             box-sizing: border-box;
             text-align: center;
-            border: 1px solid #333;
+            border: 1px solid #f3eeee;
         }
         h2 {
             font-family: 'Open Sans', sans-serif;
             font-weight: 500;
-            color: #1e90ff;
+            color: #4bff1e;
         }
         .option {
             margin: 10px 0;
             padding: 15px;
             width: 100%;
-            border: none;
+            border: 4px solid #0096c4;
             border-radius: 8px;
             background-color: #1e90ff;
             color: #ffffff;
@@ -63,14 +63,16 @@
             transition: background-color 0.3s, transform 0.3s;
         }
         .option:hover {
-            background-color: #187bcd;
+            background-color: #188bcd;
             transform: scale(1.02);
         }
         .option.correct {
             background-color: #28a745;
+            border: 1px solid #04e431;
         }
         .option.incorrect {
             background-color: #dc3545;
+            border: 1px solid #e40404;
         }
         .result {
             margin-top: 20px;
@@ -83,7 +85,7 @@
         }
         #nextButton {
             background-color: #28a745;
-            border: none;
+            border: 2px solid #17eb17;;
             border-radius: 8px;
             padding: 10px 20px;
             color: white;
@@ -190,9 +192,10 @@
             question: "¿Qué obra de la región del Litoral es explotada por su caudal?",
             options: [
                 "La obra de 'Arrayanes' Río Limay",
-                "La obra de 'Río Paraná'",
+                "La obra de 'Río Parana'",
                 "La obra de 'Río Uruguay'",
-                "La obra de 'Río Paraguay'"
+                "La Obra de 'Rio de'"
+                
             ],
             answer: 0
         }
@@ -247,7 +250,7 @@
             displayQuestion();
         } else {
             const resultDiv = document.getElementById('result');
-            const emoji = score === questions.length ? '😊' : '😢';
+            const emoji = score === questions.length ? '😘' : '😢';
             resultDiv.innerHTML = `Tu puntaje final es ${score} de ${questions.length} ${emoji}`;
             document.getElementById('question').textContent = '¡Has completado el cuestionario!';
             const buttons = document.querySelectorAll('.option');
